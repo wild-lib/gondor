@@ -1,0 +1,31 @@
+{
+	admin off
+	http_port 0
+	https_port 8080
+}
+
+:8080 {
+	tls bin/certs/cert.pem bin/certs/key.pem
+	root website/dist
+
+	log {
+		format single_field common_log
+		output file logs/access.log {
+			roll_size 20mb
+			roll_keep 10
+		}
+	}
+
+	encode gzip zstd
+	file_server
+
+	@assets {
+		not {
+			path /api/*
+		}
+	}
+	handle @assets {
+		try_files {path} /index.html
+	}
+	reverse_proxy /api/* 127.0.0.1:8000
+}
