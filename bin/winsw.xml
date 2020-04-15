@@ -8,8 +8,8 @@
   <name># Gondor Web Server</name>
   <description>Gondor WEB服务</description>
   
-  <workingdirectory>D:\gondor</workingdirectory>
-  <executable>D:\gondor\gondor.exe</executable>
+  <workingdirectory>E:\gondor</workingdirectory>
+  <executable>E:\gondor\gondor.exe</executable>
   <arguments>run</arguments>
   <logmode>reset</logmode>
   

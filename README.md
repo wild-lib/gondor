@@ -14,6 +14,31 @@
 
 账号为 **admin** 密码是 **654321**
 
+## 编译重要提示
+
+由于 etcd 和 grpc 的版本冲突，后面两节中的 make all 不可用，需要使用以下步骤代替：
+
+0. 更新依赖库（可选）
+
+```bash
+# 将大部分依赖库升级到最新发行版本，即 latest
+# caddy, fiber, rpcx, sno 升级到最新主干版本，即 master
+# grpc 固定在 v1.26.0 版本，因为 etcd 和它的新版本不兼容
+gawk -f go_mod_up.awk go.mod
+```
+
+1. 打开 go.mod 文件，将 replace 这一段先注释掉
+
+> // replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
+
+2. 接着编译 gondor 
+
+```bash
+go build -ldflags="-s -w" ./cmd/gondor/
+```
+
+3. 再将注释去掉，然后编译 moria 和 rohan （双击运行 make.bat 或者命令行下执行 make ）
+
 ## Windows 下的安装与编译
 
 （默认项目文件夹 D:\gondor ）
@@ -24,13 +49,15 @@
 	
 2. 同样，在 Dos 下进入 website 文件夹，第一次执行 npm install 安装依赖包，可能还需要运行 npm audit fix ，
 	
-	在 Windows 下双击运行 make.bat ，生成静态文件在 website/dist 文件夹；
+	在 Windows 下双击运行 build.bat ，生成静态文件在 website/dist 文件夹；
 	
 3. 进入 bin 文件夹，修改 winsw.xml 中的项目文件夹位置，双击运行 install.bat ，
 
     生成开发用的ssl证书，并将 gondor.exe 安装为 Windows 服务和启动服务；
 
-4. 在 Dos 下运行接口程序 rohan.exe ，然后在浏览器中打开 https://127.0.0.1:8080/ （注意您是否有更换端口）
+4. 核对和修改 settings.yml 中的数据库、缓存连接参数，在 Dos 下运行接口程序 rohan.exe ，
+
+    然后在浏览器中打开 https://127.0.0.1:8080/ （注意您是否有更换端口）
 
 ## Linux/MacOS 下的安装与编译
 
@@ -96,7 +123,9 @@ sudo chmod 600 /Library/LaunchAgents/my.gondor.plist
 sudo launchctl load /Library/LaunchAgents/my.gondor.plist
 ```
 
-3. 在项目文件夹生成 Web Server 和 Web API 程序
+3. 在项目文件夹生成 Web Server 和 Web API 程序，启动 rohan 之前，
+
+   先核对和修改 settings.yml 中的数据库、缓存连接参数
 ```bash
 #每次重新编译 gondor 执行
 make serv && systemctl restart gondor
