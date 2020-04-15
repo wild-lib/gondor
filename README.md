@@ -18,11 +18,11 @@
 
 （默认项目文件夹 D:\gondor ）
 
-1. 第一次运行，在 Dos 下进入项目文件夹，执行 make all 生成 gondor.exe 和 rohan.exe ，
+1. 第一次运行，在 Dos 下进入项目文件夹，执行 make all 生成 gondor.exe 以及 moria.exe 和 rohan.exe ，
 
-	以后只需要在 Windows 下双击运行 make.bat ，重新生成 rohan.exe；
+	以后只需要在 Windows 下双击运行 make.bat ，重新生成 moria.exe 和 rohan.exe；
 	
-2. 同样，在 Dos 下进入 website 文件夹，第一次执行 npm install 安装依赖包，
+2. 同样，在 Dos 下进入 website 文件夹，第一次执行 npm install 安装依赖包，可能还需要运行 npm audit fix ，
 	
 	在 Windows 下双击运行 make.bat ，生成静态文件在 website/dist 文件夹；
 	
@@ -39,6 +39,8 @@
 1. 使用 [mkcert](https://github.com/FiloSottile/mkcert) 在 bin/certs/ 下生成开发用ssl证书
 
 2. 将 gondor 设置为系统服务，可保持服务在后台运行，并且方便管理
+
+   2.1 Linux systemd 服务
 
 ```bash
 cat > /etc/systemd/system/gondor.service <<EOD
@@ -64,6 +66,36 @@ EOD
 systemctl daemon-reload
 ```
 
+​	2.2 MacOS launchd 服务
+
+```zsh
+sudo cat > /Library/LaunchAgents/my.gondor.plist <<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>my.gondor</string>
+  <key>WorkingDirectory</key>
+  <string>/var/projects/gondor</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/var/projects/gondor/gondor</string>
+    <string>run</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <false/>
+</dict>
+</plist>
+EOD
+
+sudo chown root:wheel /Library/LaunchAgents/my.gondor.plist
+sudo chmod 600 /Library/LaunchAgents/my.gondor.plist
+sudo launchctl load /Library/LaunchAgents/my.gondor.plist
+```
+
 3. 在项目文件夹生成 Web Server 和 Web API 程序
 ```bash
 #每次重新编译 gondor 执行
@@ -76,6 +108,7 @@ make && ./rohan -p 8000 -v
 ```bash
 cd /var/projects/gondor/website/
 npm install
+npm audit fix #可能需要运行
 npm run build:prod
 ```
    在浏览器中打开 https://127.0.0.1:8080/ （注意您是否有更换端口）

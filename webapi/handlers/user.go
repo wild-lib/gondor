@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/azhai/gondor/webapi/models"
-	"github.com/azhai/gondor/webapi/utils"
+	"github.com/astro-bug/gondor/webapi/models/db"
+	"github.com/astro-bug/gondor/webapi/utils"
 	"github.com/azhai/gozzo-db/session"
 	"github.com/gofiber/fiber"
 )
@@ -14,7 +14,7 @@ type UserData struct {
 	Password string `json:"password"`
 }
 
-func GetUserInfo(user *models.User) map[string]interface{} {
+func GetUserInfo(user *db.User) map[string]interface{} {
 	info := map[string]interface{}{
 		"username": user.Username,
 	}
@@ -24,11 +24,11 @@ func GetUserInfo(user *models.User) map[string]interface{} {
 	if user.Mobile != "" {
 		info["mobile"] = user.Mobile
 	}
-	if user.Avatar != nil {
-		info["avatar"] = *user.Avatar
+	if user.Avatar != "" {
+		info["avatar"] = user.Avatar
 	}
-	if user.Introduction != nil {
-		info["introduction"] = *user.Introduction
+	if user.Introduction != "" {
+		info["introduction"] = user.Introduction
 	}
 	return info
 }
@@ -44,7 +44,7 @@ func UserLoginHandler(ctx *fiber.Ctx) {
 		})
 	}
 	// 查询数据
-	user, token, err := new(models.User).Signin(data.Username, data.Password)
+	user, token, err := db.UserSignin(data.Username, data.Password)
 	if err != nil || token == "" {
 		ctx.JSON(fiber.Map{
 			"code":    510,
@@ -53,9 +53,9 @@ func UserLoginHandler(ctx *fiber.Ctx) {
 		return
 	}
 	// 写入Session
-	roles := new(models.UserRole).GetUserRoles(user.UID)
-	sess := models.Session(token)
-	sess.BindRoles(user.UID, roles, true)
+	roles := db.GetUserRoles(user.Uid)
+	sess := db.Session(token)
+	sess.BindRoles(user.Uid, roles, true)
 	sess.SaveMap(GetUserInfo(user), false)
 	ctx.JSON(fiber.Map{
 		"code": 200,
@@ -72,7 +72,7 @@ func UserLogoutHandler(ctx *fiber.Ctx) {
 		utils.Abort(ctx, http.StatusUnauthorized)
 		return
 	}
-	models.Registry().DelSession(token)
+	db.Registry().DelSession(token)
 	result := fiber.Map{
 		"code": 200,
 		"data": "成功退出",
@@ -83,7 +83,7 @@ func UserLogoutHandler(ctx *fiber.Ctx) {
 // 用户资料
 func UserInfoHandler(ctx *fiber.Ctx) {
 	token := ctx.Query("token")
-	sess := models.Session(token)
+	sess := db.Session(token)
 	if uid, err := sess.GetString("uid"); err != nil || uid == "" {
 		result := fiber.Map{
 			"code":    508,

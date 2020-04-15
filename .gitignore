@@ -6,7 +6,6 @@
 */*.so
 */*.so.*
 *.bak
-*.exe
 *.log
 *.log.*
 *.pem
@@ -16,5 +15,11 @@
 *.txt
 *.upx
 
+./gondor
+gondor.exe
+./moria
+moria.exe
+./rohan
+rohan.exe
 website/dist/*
 website/node_modules/*

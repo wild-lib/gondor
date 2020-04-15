@@ -1,7 +1,7 @@
 package webapi
 
 import (
-	"github.com/azhai/gondor/webapi/handlers"
+	"github.com/astro-bug/gondor/webapi/handlers"
 	"github.com/gofiber/fiber"
 )
 

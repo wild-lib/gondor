@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/azhai/gondor/webapi/models"
-	"github.com/azhai/gondor/webapi/utils"
+	"github.com/astro-bug/gondor/webapi/models/db"
+	"github.com/astro-bug/gondor/webapi/utils"
 	"github.com/gofiber/fiber"
 )
 
@@ -88,7 +88,7 @@ func RoleAuth(ctx *fiber.Ctx) {
 		utils.Abort(ctx, http.StatusUnauthorized)
 		return
 	}
-	sess := models.Session(token)
+	sess := db.Session(token)
 	if sess.GetTimeout(false) < -1 {
 		utils.Abort(ctx, http.StatusUnauthorized)
 		return
