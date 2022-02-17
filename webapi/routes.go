@@ -2,7 +2,7 @@ package webapi
 
 import (
 	"github.com/astro-bug/gondor/webapi/handlers"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 func AddRoutes(r *fiber.Group) {

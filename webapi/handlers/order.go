@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/astro-bug/gondor/webapi/fakes"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 // 订单列表

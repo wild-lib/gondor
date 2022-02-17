@@ -8,9 +8,9 @@ import (
 	"github.com/astro-bug/gondor/webapi/config"
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/services"
-	"github.com/gofiber/compression"
-	"github.com/gofiber/cors"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2"
 )
 
 var (
@@ -38,7 +38,7 @@ func init() {
 
 func main() {
 	app := fiber.New()
-	app.Use(compression.New()).Use(cors.New())
+	app.Use(compress.New()).Use(cors.New())
 	webapi.AddRoutes(app.Group("/api"))
 	app.Listen(fmt.Sprintf(":%d", port))
 }

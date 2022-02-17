@@ -6,7 +6,7 @@ import (
 
 	"github.com/astro-bug/gondor/webapi/fakes"
 	"github.com/astro-bug/gondor/webapi/utils"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 // 文章列表

@@ -6,7 +6,7 @@ import (
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/utils"
 	"github.com/azhai/gozzo-db/session"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 type UserData struct {

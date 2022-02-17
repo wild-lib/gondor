@@ -15,7 +15,7 @@ import (
 
 	"gitea.com/lunny/log"
 	"github.com/gobwas/glob"
-	"xorm.io/reverse/language"
+	"xorm.io/reverse/pkg/language"
 	"xorm.io/xorm"
 	"xorm.io/xorm/names"
 	"xorm.io/xorm/schemas"

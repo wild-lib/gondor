@@ -7,7 +7,7 @@ import (
 
 	"github.com/astro-bug/gondor/webapi/fakes"
 	"github.com/astro-bug/gondor/webapi/models/db"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 // 完整菜单

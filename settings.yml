@@ -25,7 +25,7 @@ connections:
          port: 3306
          username: "dba"
          password: "pass"
-         database: "db_test"
+         database: "test"
          options: { charset: "utf8mb4" }
 
 micro_services:
