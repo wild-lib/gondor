@@ -4,17 +4,18 @@ import (
 	"strings"
 
 	"github.com/astro-bug/gondor/webapi/fakes"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 订单列表
-func OrderListHandler(ctx *fiber.Ctx) {
+func OrderListHandler(ctx *fiber.Ctx) (err error) {
 	result := fakes.ReduceBlanks(`{"code":200, "total":20, "data":[` + fakes.GenOrder() + `]}`)
-	ctx.Type("json").SendBytes([]byte(result))
+	err = ctx.Type("json").Send([]byte(result))
+	return
 }
 
 // 查找用户名
-func SearchUserHandler(ctx *fiber.Ctx) {
+func SearchUserHandler(ctx *fiber.Ctx) (err error) {
 	var names []string
 	match := strings.ToLower(ctx.Query("name"))
 	for _, name := range fakes.FakeUsers {
@@ -29,5 +30,6 @@ func SearchUserHandler(ctx *fiber.Ctx) {
 			"items": names,
 		},
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }

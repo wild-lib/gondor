@@ -6,7 +6,7 @@ import (
 
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/utils"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 用户鉴权

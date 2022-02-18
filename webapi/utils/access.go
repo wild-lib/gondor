@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 用户分类

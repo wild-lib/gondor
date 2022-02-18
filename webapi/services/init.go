@@ -41,7 +41,7 @@ func RegisterAll(s *server.Server) {
 func CallMethod(class, method string, args, reply interface{}) (err error) {
 	if disco == nil {
 		discoAddr := fmt.Sprintf("%s@%s", rpcxProto, rpcxAddr)
-		disco = client.NewPeer2PeerDiscovery(discoAddr, "")
+		disco, _ = client.NewPeer2PeerDiscovery(discoAddr, "")
 	}
 	c := client.NewXClient(class, client.Failtry, client.RandomSelect, disco, client.DefaultOption)
 	defer c.Close()

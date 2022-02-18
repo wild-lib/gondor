@@ -6,11 +6,11 @@ import (
 
 	"github.com/astro-bug/gondor/webapi/fakes"
 	"github.com/astro-bug/gondor/webapi/utils"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 文章列表
-func ArticleListHandler(ctx *fiber.Ctx) {
+func ArticleListHandler(ctx *fiber.Ctx) (err error) {
 	var (
 		pageno, pagesize int
 		sort             string
@@ -46,31 +46,35 @@ func ArticleListHandler(ctx *fiber.Ctx) {
 			arts = append(arts, fakes.Articles[offset+i])
 		}
 	}
-	ctx.Type("json").SendBytes([]byte(`{"code":200, "total":` +
+	err = ctx.Type("json").Send([]byte(`{"code":200, "total":` +
 		strconv.Itoa(fakes.ArticleTotal) + `, "data":[` + strings.Join(arts, ", ") + `]}`))
+	return
 }
 
 // 文章详情
-func ArticleDetailHandler(ctx *fiber.Ctx) {
+func ArticleDetailHandler(ctx *fiber.Ctx) (err error) {
 	id, _ := strconv.Atoi(ctx.Query("id"))
 	result := fiber.Map{
 		"code": 200,
 		"data": fakes.Articles[id-1],
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }
 
 // 文章阅读量
-func ArticleReadHandler(ctx *fiber.Ctx) {
+func ArticleReadHandler(ctx *fiber.Ctx) (err error) {
 	result := fakes.ReduceBlanks(`{"code":200, "data":` + fakes.PageViewData() + `}`)
-	ctx.Type("json").SendBytes([]byte(result))
+	err = ctx.Type("json").Send([]byte(result))
+	return
 }
 
 // 添加修改文章
-func ArticleModHandler(ctx *fiber.Ctx) {
+func ArticleModHandler(ctx *fiber.Ctx) (err error) {
 	result := fiber.Map{
 		"code": 200,
 		"data": "success",
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }

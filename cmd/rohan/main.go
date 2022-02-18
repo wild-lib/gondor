@@ -8,9 +8,9 @@ import (
 	"github.com/astro-bug/gondor/webapi/config"
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/services"
-	"github.com/gofiber/fiber/v2/middleware/compress"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
+	"gitee.com/azhai/fiber-u8l/v2/middleware/compress"
+	"gitee.com/azhai/fiber-u8l/v2/middleware/cors"
 )
 
 var (

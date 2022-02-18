@@ -2,10 +2,10 @@ package webapi
 
 import (
 	"github.com/astro-bug/gondor/webapi/handlers"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
-func AddRoutes(r *fiber.Group) {
+func AddRoutes(r fiber.Router) {
 	r.Use(handlers.RoleAuth)
 
 	// 用户登录

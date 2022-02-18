@@ -6,7 +6,7 @@ import (
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/utils"
 	"github.com/azhai/gozzo-db/session"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 type UserData struct {
@@ -34,11 +34,11 @@ func GetUserInfo(user *db.User) map[string]interface{} {
 }
 
 // 用户登录
-func UserLoginHandler(ctx *fiber.Ctx) {
+func UserLoginHandler(ctx *fiber.Ctx) (err error) {
 	// 获取参数
 	var data UserData
-	if err := ctx.BodyParser(&data); err != nil {
-		ctx.JSON(fiber.Map{
+	if err = ctx.BodyParser(&data); err != nil {
+		err = ctx.JSON(fiber.Map{
 			"code":    510,
 			"message": err.Error(),
 		})
@@ -46,7 +46,7 @@ func UserLoginHandler(ctx *fiber.Ctx) {
 	// 查询数据
 	user, token, err := db.UserSignin(data.Username, data.Password)
 	if err != nil || token == "" {
-		ctx.JSON(fiber.Map{
+		err = ctx.JSON(fiber.Map{
 			"code":    510,
 			"message": "失败，密码不正确！",
 		})
@@ -57,16 +57,17 @@ func UserLoginHandler(ctx *fiber.Ctx) {
 	sess := db.Session(token)
 	sess.BindRoles(user.Uid, roles, true)
 	sess.SaveMap(GetUserInfo(user), false)
-	ctx.JSON(fiber.Map{
+	err = ctx.JSON(fiber.Map{
 		"code": 200,
 		"data": fiber.Map{
 			"token": token,
 		},
 	})
+	return
 }
 
 // 用户退出
-func UserLogoutHandler(ctx *fiber.Ctx) {
+func UserLogoutHandler(ctx *fiber.Ctx) (err error) {
 	token := ctx.Cookies("access_token")
 	if token == "" {
 		utils.Abort(ctx, http.StatusUnauthorized)
@@ -77,11 +78,12 @@ func UserLogoutHandler(ctx *fiber.Ctx) {
 		"code": 200,
 		"data": "成功退出",
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }
 
 // 用户资料
-func UserInfoHandler(ctx *fiber.Ctx) {
+func UserInfoHandler(ctx *fiber.Ctx) (err error) {
 	token := ctx.Query("token")
 	sess := db.Session(token)
 	if uid, err := sess.GetString("uid"); err != nil || uid == "" {
@@ -89,7 +91,7 @@ func UserInfoHandler(ctx *fiber.Ctx) {
 			"code":    508,
 			"message": "失败，用户不存在！",
 		}
-		ctx.JSON(result)
+		err = ctx.JSON(result)
 	} else {
 		data, _ := sess.GetAllString()
 		result := fiber.Map{
@@ -101,6 +103,7 @@ func UserInfoHandler(ctx *fiber.Ctx) {
 				"introduction": data["introduction"],
 			},
 		}
-		ctx.JSON(result)
+		err = ctx.JSON(result)
 	}
+	return
 }

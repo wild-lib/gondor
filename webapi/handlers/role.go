@@ -7,17 +7,18 @@ import (
 
 	"github.com/astro-bug/gondor/webapi/fakes"
 	"github.com/astro-bug/gondor/webapi/models/db"
-	"github.com/gofiber/fiber/v2"
+	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 完整菜单
-func AllMenuHandler(ctx *fiber.Ctx) {
+func AllMenuHandler(ctx *fiber.Ctx) (err error) {
 	routes := append(append(constantRoutes, permRoute), asyncRoutes...)
-	ctx.Type("json").SendBytes([]byte(`{"code":200, "data":[` + fakes.ReduceBlanks(strings.Join(routes, ",")) + `]}`))
+	err = ctx.Type("json").Send([]byte(`{"code":200, "data":[` + fakes.ReduceBlanks(strings.Join(routes, ",")) + `]}`))
+	return
 }
 
 // 角色列表
-func RoleListHandler(ctx *fiber.Ctx) {
+func RoleListHandler(ctx *fiber.Ctx) (err error) {
 	superRoutes := append(append(constantRoutes, permRoute), asyncRoutes...)
 	editorRoutes := append(constantRoutes, asyncRoutes...)
 	DefaultRoutes := `{
@@ -52,27 +53,30 @@ func RoleListHandler(ctx *fiber.Ctx) {
   }`, role.Name, zhName, role.Remark, routes))
 	}
 	data := fakes.ReduceBlanks(buf.String())
-	ctx.Type("json").SendBytes([]byte(`{"code":200, "data":[` + data + `]}`))
+	err = ctx.Type("json").Send([]byte(`{"code":200, "data":[` + data + `]}`))
+	return
 }
 
 // 添加角色
-func RoleAddHandler(ctx *fiber.Ctx) {
+func RoleAddHandler(ctx *fiber.Ctx) (err error) {
 	result := fiber.Map{
 		"code": 200,
 		"data": fiber.Map{
 			"key": fakes.RandInt(300, 5000),
 		},
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }
 
 // 修改或删除角色
-func RoleModHandler(ctx *fiber.Ctx) {
+func RoleModHandler(ctx *fiber.Ctx) (err error) {
 	result := fiber.Map{
 		"code": 200,
 		"data": fiber.Map{
 			"status": "success",
 		},
 	}
-	ctx.JSON(result)
+	err = ctx.JSON(result)
+	return
 }

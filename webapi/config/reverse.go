@@ -151,7 +151,7 @@ func RunReverse(source *ReverseSource, target *ReverseTarget) error {
 	tables = filterTables(tables, target)
 
 	// load configuration from language
-	lang := language.GetLanguage(target.Language)
+	lang := language.GetLanguage(target.Language, false)
 	funcs := newFuncs()
 	formatter := formatters[target.Formatter]
 	importter := importters[target.Importter]
@@ -169,18 +169,18 @@ func RunReverse(source *ReverseSource, target *ReverseTarget) error {
 
 	if lang != nil {
 		if bs == nil {
-			bs = []byte(lang.Template)
+			bs = []byte(lang.GetTemplate())
 		}
-		for k, v := range lang.Funcs {
+		for k, v := range lang.GetFuncs() {
 			funcs[k] = v
 		}
 		if formatter == nil {
-			formatter = lang.Formatter
+			formatter = lang.GetFormatter()
 		}
 		if importter == nil {
-			importter = lang.Importter
+			importter = lang.GetImportter()
 		}
-		target.ExtName = lang.ExtName
+		target.ExtName = lang.GetExtName()
 	}
 	if !strings.HasPrefix(target.ExtName, ".") {
 		target.ExtName = "." + target.ExtName
