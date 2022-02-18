@@ -39,6 +39,6 @@ func init() {
 func main() {
 	app := fiber.New()
 	app.Use(compress.New()).Use(cors.New())
-	webapi.AddRoutes(app.Group("/api"))
+	webapi.AddRoutes(app.Group("/api").(*fiber.Group))
 	app.Listen(fmt.Sprintf(":%d", port))
 }

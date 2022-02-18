@@ -5,8 +5,8 @@ import (
 	"gitee.com/azhai/fiber-u8l/v2"
 )
 
-func AddRoutes(r fiber.Router) {
-	r.Use(handlers.RoleAuth)
+func AddRoutes(r *fiber.Group) {
+	r = r.Use(handlers.RoleAuth).(*fiber.Group)
 
 	// 用户登录
 	r.Post("/user/login", handlers.UserLoginHandler)

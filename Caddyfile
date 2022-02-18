@@ -1,10 +1,10 @@
 {
 	admin off
 	http_port 0
-	https_port 8080
+	https_port 443
 }
 
-:8080 {
+:443 {
 	tls bin/certs/cert.pem bin/certs/key.pem
 	root website/dist
 
