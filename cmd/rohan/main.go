@@ -4,13 +4,14 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/astro-bug/gondor/webapi"
-	"github.com/astro-bug/gondor/webapi/config"
-	"github.com/astro-bug/gondor/webapi/models/db"
-	"github.com/astro-bug/gondor/webapi/services"
 	"gitee.com/azhai/fiber-u8l/v2"
 	"gitee.com/azhai/fiber-u8l/v2/middleware/compress"
 	"gitee.com/azhai/fiber-u8l/v2/middleware/cors"
+	"github.com/astro-bug/gondor/webapi"
+	"github.com/astro-bug/gondor/webapi/config"
+	"github.com/astro-bug/gondor/webapi/handlers"
+	"github.com/astro-bug/gondor/webapi/models/db"
+	"github.com/astro-bug/gondor/webapi/services"
 )
 
 var (
@@ -39,6 +40,6 @@ func init() {
 func main() {
 	app := fiber.New()
 	app.Use(compress.New()).Use(cors.New())
-	webapi.AddRoutes(app.Group("/api").(*fiber.Group))
+	webapi.AddRoutes(app.Group("/api", handlers.RoleAuth))
 	app.Listen(fmt.Sprintf(":%d", port))
 }

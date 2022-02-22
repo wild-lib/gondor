@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
+	"gitee.com/azhai/fiber-u8l/v2"
 	"github.com/astro-bug/gondor/webapi/models/db"
 	"github.com/astro-bug/gondor/webapi/utils"
-	"gitee.com/azhai/fiber-u8l/v2"
 )
 
 // 用户鉴权
@@ -71,7 +71,7 @@ func UserAuth(ctx *fiber.Ctx) {
 }
 
 // 用户认证与角色控制
-func RoleAuth(ctx *fiber.Ctx) {
+func RoleAuth(ctx *fiber.Ctx) (err error) {
 	// 匿名可访问页面
 	path := ctx.Path()
 	if strings.HasPrefix(path, "/api/user/log") {
@@ -96,4 +96,5 @@ func RoleAuth(ctx *fiber.Ctx) {
 
 	// 鉴权
 	ctx.Next()
+	return
 }
